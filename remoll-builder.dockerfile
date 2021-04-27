@@ -1,5 +1,5 @@
 # Build stage with Spack pre-installed and ready to be used
-FROM wdconinc/spack:centos8 as builder
+FROM jeffersonlab/remoll-base:centos8 as builder
 
 
 # What we want to install and how we want to install it
@@ -7,8 +7,6 @@ FROM wdconinc/spack:centos8 as builder
 RUN mkdir /opt/spack-environment \
 &&  (echo "spack:" \
 &&   echo "  definitions:" \
-&&   echo "  - compilers:" \
-&&   echo "    - gcc@10.2.0" \
 &&   echo "  - cxxstd:" \
 &&   echo "    - cxxstd=17" \
 &&   echo "  - packages:" \
