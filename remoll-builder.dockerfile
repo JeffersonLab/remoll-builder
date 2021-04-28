@@ -1,5 +1,5 @@
 # Build stage with Spack pre-installed and ready to be used
-FROM jeffersonlab/remoll-base:centos8 as builder
+FROM jeffersonlab/remoll-spack:centos8 as builder
 
 
 # What we want to install and how we want to install it
@@ -18,7 +18,6 @@ RUN mkdir /opt/spack-environment \
 &&   echo "  - matrix:" \
 &&   echo "    - - \$packages" \
 &&   echo "    - - \$cxxstd" \
-&&   echo "    - - \$%compilers" \
 &&   echo "  packages:" \
 &&   echo "    all:" \
 &&   echo "      target:" \
