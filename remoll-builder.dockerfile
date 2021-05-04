@@ -6,18 +6,10 @@ FROM jeffersonlab/remoll-spack:centos8 as builder
 # is specified in a manifest file (spack.yaml)
 RUN mkdir /opt/spack-environment \
 &&  (echo "spack:" \
-&&   echo "  definitions:" \
-&&   echo "  - cxxstd:" \
-&&   echo "    - cxxstd=17" \
-&&   echo "  - packages:" \
-&&   echo "    - clhep" \
-&&   echo "    - xerces-c" \
-&&   echo "    - geant4" \
-&&   echo "    - root -opengl" \
 &&   echo "  specs:" \
-&&   echo "  - matrix:" \
-&&   echo "    - - \$packages" \
-&&   echo "    - - \$cxxstd" \
+&&   echo "    - cmake" \
+&&   echo "    - geant4 cxxstd=11" \
+&&   echo "    - root -opengl cxxstd=11" \
 &&   echo "  packages:" \
 &&   echo "    all:" \
 &&   echo "      target:" \
