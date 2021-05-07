@@ -32,7 +32,8 @@ RUN find -L /opt/view/* -type f -exec readlink -f '{}' \; | \
     awk -F: '{print $1}' | xargs strip -s
 
 # Modifications to the environment that are necessary to run
-RUN echo "spack env activate -d /opt/spack-environment" >> /etc/profile.d/z10_spack_environment.sh
+RUN cd /opt/spack-environment && \
+    spack env activate --sh -d . >> /etc/profile.d/z10_spack_environment.sh
 
 ENTRYPOINT ["/bin/bash"]
 CMD ["interactive-shell"]
