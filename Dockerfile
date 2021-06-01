@@ -10,6 +10,7 @@ RUN mkdir /opt/spack-environment \
 &&  (echo "spack:" \
 &&   echo "  specs:" \
 &&   echo "    - geant4 cxxstd=11" \
+&&   echo "    - boost cxxstd=11" \
 &&   echo "    - root -opengl cxxstd=11" \
 &&   echo "  packages:" \
 &&   echo "    all:" \
