@@ -1,8 +1,8 @@
 FROM jeffersonlab/remoll-spack:centos8
 
 RUN yum -y group install "Development Tools"
-
 RUN yum -y install cmake
+RUN spack external find --scope site
 
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
