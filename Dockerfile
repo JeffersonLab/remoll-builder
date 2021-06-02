@@ -9,9 +9,10 @@ RUN yum -y install cmake
 RUN mkdir /opt/spack-environment \
 &&  (echo "spack:" \
 &&   echo "  specs:" \
-&&   echo "    - geant4 cxxstd=11" \
 &&   echo "    - boost cxxstd=11" \
-&&   echo "    - root -opengl cxxstd=11" \
+&&   echo "    - geant4 +qt +opengl cxxstd=11" \
+&&   echo "    - root cxxstd=11" \
+&&   echo "    - mesa -llvm" \
 &&   echo "  packages:" \
 &&   echo "    all:" \
 &&   echo "      target:" \
