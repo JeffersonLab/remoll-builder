@@ -22,8 +22,41 @@ RUN mkdir /opt/spack-environment \
 &&   echo "    install_tree: /opt/software" \
 &&   echo "  view: /opt/view") > /opt/spack-environment/spack.yaml
 
+# Setup spack buildcache mirrors
+RUN --mount=type=cache,target=/var/cache/spack-mirror                   \
+    spack mirror add docker /var/cache/spack-mirror                     \
+ && spack mirror list
+
 # Install the software, remove unnecessary deps
-RUN cd /opt/spack-environment && spack env activate . && spack install --fail-fast && spack gc -y
+RUN --mount=type=cache,target=/var/cache/spack-mirror                   \
+    cd /opt/spack-environment                                           \
+ && spack env activate .                                                \
+ && spack install --fail-fast                                           \
+ && spack gc -y
+
+# Update the local build cache if needed
+RUN --mount=type=cache,target=/var/cache/spack-mirror                   \
+    spack buildcache list --allarch --long                              \
+     | grep -v -e '---'                                                 \
+     | sed "s/@.\+//"                                                   \
+     | sort > tmp.buildcache.txt                                        \
+ && spack find --no-groups --long                                       \
+     | tail -n +2                                                       \
+     | grep -v "==>"                                                    \
+     | sed "s/@.\+//"                                                   \
+     | sort > tmp.manifest.txt                                          \
+ && comm -23 tmp.manifest.txt tmp.buildcache.txt                        \
+     > tmp.needsupdating.txt                                            \
+ && if [ $(wc -l < tmp.needsupdating.txt) -ge 1 ]; then                 \
+     cat tmp.needsupdating.txt                                          \
+        | awk '{print($2);}'                                            \
+        | tr '\n' ' '                                                   \
+        | xargs spack buildcache create -uaf -d /var/cache/spack-mirror \
+     && spack buildcache update-index -d /var/cache/spack-mirror;       \
+    fi                                                                  \
+ && rm tmp.manifest.txt                                                 \
+ && rm tmp.buildcache.txt                                               \
+ && rm tmp.needsupdating.txt
 
 # Strip all the binaries
 RUN find -L /opt/view/* -type f -exec readlink -f '{}' \; | \
