@@ -41,6 +41,10 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
       continue-on-error: true
+    - name: Check initial disk space
+      run: |
+        df -h
+        du -sh /tmp/.buildx-cache
     - name: Build and push
       id: docker_build
       uses: docker/build-push-action@v2
@@ -54,3 +58,7 @@ jobs:
         cache-to: type=local,dest=/tmp/.buildx-cache
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
+    - name: Check final disk space
+      run: |
+        df -h
+        du -sh /tmp/.buildx-cache
