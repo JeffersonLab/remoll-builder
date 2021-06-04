@@ -44,7 +44,7 @@ jobs:
     - name: Check initial disk space
       run: |
         df -h
-        test -d /tmp/.buildx-cache && du -sh /tmp/.buildx-cache
+        test -d /tmp/.buildx-cache && du -sh /tmp/.buildx-cache || true
     - name: Build and push
       id: docker_build
       uses: docker/build-push-action@v2
@@ -61,4 +61,4 @@ jobs:
     - name: Check final disk space
       run: |
         df -h
-        test -d /tmp/.buildx-cache && du -sh /tmp/.buildx-cache
+        test -d /tmp/.buildx-cache && du -sh /tmp/.buildx-cache || true
