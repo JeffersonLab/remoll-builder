@@ -2,6 +2,7 @@ FROM jeffersonlab/remoll-spack:centos8 as builder
 
 RUN yum -y group install "Development Tools"
 RUN yum -y install cmake
+RUN spack external find --scope site autoconf automake bash bison bzip2 cmake cpio diffutils findutils flex gcc git gmake libtool m4 openjdk perl pkgconf tar texinfo
 
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
