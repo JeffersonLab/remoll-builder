@@ -1,7 +1,6 @@
-FROM jeffersonlab/remoll-spack:centos8
+FROM jeffersonlab/remoll-spack:centos8 as builder
 
 RUN yum -y group install "Development Tools"
-
 RUN yum -y install cmake
 
 # What we want to install and how we want to install it
@@ -36,6 +35,18 @@ RUN find -L /opt/view/* -type f -exec readlink -f '{}' \; | \
 RUN cd /opt/spack-environment && \
     spack env activate --sh -d . >> /etc/profile.d/z10_spack_environment.sh
 
-ENTRYPOINT ["/bin/bash"]
-CMD ["interactive-shell"]
 
+# Bare OS image to run the installed executables
+FROM jeffersonlab/remoll-spack:centos8
+
+RUN yum -y group install "Development Tools"
+RUN yum -y install cmake
+
+COPY --from=builder /opt/spack-environment /opt/spack-environment
+COPY --from=builder /opt/software /opt/software
+COPY --from=builder /opt/view /opt/view
+COPY --from=builder /etc/profile.d/z10_spack_environment.sh /etc/profile.d/z10_spack_environment.sh
+
+
+
+ENTRYPOINT ["/bin/bash", "--rcfile", "/etc/profile", "-l"]
