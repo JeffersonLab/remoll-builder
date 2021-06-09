@@ -21,6 +21,11 @@ RUN mkdir /opt/spack-environment \
 &&   echo "    install_tree: /opt/software" \
 &&   echo "  view: /opt/view") > /opt/spack-environment/spack.yaml
 
+# Setup spack buildcache mirrors
+RUN --mount=type=cache,target=/var/cache/spack-mirror                   \
+    spack mirror add docker /var/cache/spack-mirror                     \
+ && spack mirror list
+ 
 # Install the software, remove unnecessary deps
 RUN cd /opt/spack-environment && spack env activate . && spack install --fail-fast && spack gc -y
 
