@@ -2,6 +2,7 @@ FROM jeffersonlab/remoll-spack:centos8 as builder
 
 RUN yum -y group install "Development Tools"
 RUN yum -y install cmake
+RUN yum -y update
 
 # What we want to install and how we want to install it
 # is specified in a manifest file (spack.yaml)
@@ -41,6 +42,7 @@ FROM jeffersonlab/remoll-spack:centos8
 
 RUN yum -y group install "Development Tools"
 RUN yum -y install cmake
+RUN yum -y update
 
 COPY --from=builder /opt/spack-environment /opt/spack-environment
 COPY --from=builder /opt/software /opt/software
